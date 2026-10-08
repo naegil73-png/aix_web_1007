@@ -1,0 +1,166 @@
+[ 1. 디렉토리 이동 ]
+cd p1007 폴더이동
+
+[ 2. 프로젝트 생성 ]
+django-admin startproject spro01
+
+[ 3. 디렉토리 이동 ]
+cd spro01
+
+[ 4. app생성 ]
+python manage.py startapp students
+python manage.py startapp home
+
+[ 5. cmd창 생성 ]
+win+r > cmd 입력후 엔터키
+
+[ 6. cmd창에서 디렉토리 위치 이동 ]
+cd C:\workspace\web\aix_web_1007\p1007\spjt04
+
+[ 7. 서버구동 ]
+python manage.py runserver
+python -u manage.py runserver 0.0.0.0:8000
+ipconfig  : 자신의 ip를 볼수 있음.(공유기ip)
+192.168.0.58:8000
+127.0.0.1:8000
+localhost:8000
+
+[ 8. 서버접속 ]
+http://127.0.0.1:8000/
+
+[ 9. sjpt04> setting.py ]
+INSTALLED_APPS = [
+'students',
+]
+LANGUAGE_CODE = 'ko-kr'
+TIME_ZONE = 'Asia/Seoul'
+
+
+[ 10. sjpt04> urls.py ]
+from django.urls import path,include
+urlpatterns = [
+path('admin/', admin.site.urls),
+path('students/', include('students.urls')),
+path('', include('home.urls')),
+]
+
+[ 11. students > urls.py 생성 ]
+from django.urls import path,include
+from . import views
+
+app_name='students'
+urlpatterns = [
+    path('swrite/', views.swrite, name='swrite'),
+]
+
+[ 11-2. home > urls.py 생성 ]
+from django.urls import path,include
+from . import views
+
+app_name=''
+urlpatterns = [
+    path('', views.index,name='index'),
+]
+
+
+[ 12. students > views.py ]
+def swrite(request):
+    return render(request,'swrite.html')
+
+[ 12-2. home > views.py ]
+from django.shortcuts import render
+
+# 메인페이지
+def index(request):
+    return render(request,'index.html')
+
+
+[ 13. students > templates 폴더생성 ]
+swrite.html 파일 생성
+
+[ 13-2. home> templates 폴더생성 ]
+index.html 파일 생성
+
+
+----------------------------
+
+[14. db계정 생성 ]
+# db생성
+python manage.py migrate
+# db생성할것이 있는지 확인
+python manage.py makemigrations
+
+
+[ 15. 관리자 계정 생성 ]
+python manage.py createsuperuser
+admin
+admin@naver.com
+1111
+
+[ 16. 관리자페이지 확인 ]
+http://127.0.0.1:8000/admin
+admin
+1111
+
+
+[ 17. models.py  - 아래내용 입력 ]
+from django.db import models
+
+class Stu(models.Model):
+    name = models.CharField(max_length=100)
+    major = models.CharField(max_length=100)
+    age = models.IntegerField(default=0)
+    grade = models.IntegerField(default=0)
+    gender = models.CharField(max_length=30)
+
+    def __str__(self):
+         return f'{self.name},{self.major},{self.age},{self.grade},{self.gender}'
+
+[ 18. admin.py 파일 - 아래 내용 복사 ]
+from django.contrib import admin
+from students.models import Stu
+
+admin.site.register(Stu)
+
+[ 19. class적용 ]
+# db생성할것이 있는지 확인
+python manage.py makemigrations
+ # db생성
+python manage.py migrate
+
+
+[ 20. shell 에서 학생들을 등록 ]
+# 파이썬 프로그램을 실행
+python manage.py shell
+[ 저장 ]
+from students.models import Stu
+qs = Stu(name='홍길동',major='국문과',age=20,grade=1,gender='남자')
+qs.save()
+qs = Stu(name='유관순',major='영문과',age=22,grade=3,gender='여자')
+qs.save()
+qs = Stu(name='이순신',major='수학과',age=21,grade=2,gender='남자')
+qs.save()
+qs = Stu(name='강감찬',major='역사학과',age=24,grade=4,gender='남자')
+qs.save()
+
+[ 21. 검색 ]
+Stu.objects.get(name='홍길동')   #1개
+Stu.objects.all()                         #여러개-리스트
+Stu.objects.filter(name='홍길동') #여러개-리스트
+Stu.objects.filter(name__contains='홍')
+Stu.objects.filter(name__startswith='홍')
+Stu.objects.filter(name__endswith='순')
+Stu.objects.filter(age__lt='23')
+Stu.objects.filter(age__lte='23')
+Stu.objects.filter(age__gt='23')
+Stu.objects.filter(age__gte='23')
+Stu.objects.filter(id__in=[1,2])
+
+
+[ 폴더검색 위치 ]
+./  : 현재폴더에서 검색
+../ : 상위폴더에서 검색
+/   : root폴더에서 검색
+
+[ 서버종료 ]
+ctrl + c : 종료됨
