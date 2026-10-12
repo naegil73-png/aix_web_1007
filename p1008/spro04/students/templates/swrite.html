@@ -6,13 +6,22 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>학생성적관리</h1>
-<ul>
-    <li><a href='/swrite'>학생성적리스트</a></li>
-    <li><a href='/swrite'>학생성적입력</a></li>
-    <li><a href='/swrite'>관리자페이지</a></li>
-
-</ul>
-
+    <h1>학생정보입력</h1>
+    <form action="/students/swrite/" name="frm" method="post">
+        {%csrf_token%}
+        <label>이름</label>
+        <input type="text" name = "name" id = "name" required>
+        <label>학과</label>
+        <input type="text" name = "major" id = "major">
+        <label>학년</label>
+        <input type="text" name = "grade" id = "grade">
+        <label>나이</label>
+        <input type="text" name = "age" id = "age">
+        <label>성별</label>
+        <input type="radio" name = "gender" id = "man" value="남자" >
+        <label for="man">남자</label>
+        <input type="radio" name = "gender" id = "woman" value="여자" >
+        <label for = "여자">여자</label>        
+    </form>
 </body>
 </html>
